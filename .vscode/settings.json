@@ -1,0 +1,109 @@
+{
+    // Treat new files (before first save) as LaTeX files.
+    "files.defaultLanguage": "latex",
+    // Treat LaTeX package (.sty) and class (.cls) files as LaTeX files.
+    "files.associations": {
+        "*.sty": "latex",
+        "*.cls": "latex"
+    },
+    // Hide the following file types from the VS Code folder list.
+    "files.exclude": {
+        "**/*.4ct": true,
+        "**/*.4tc": true,
+        "**/*.fdb_latexmk": true,
+        "**/*.idv": true,
+        "**/*.lg": true,
+        "**/*.lof": true,
+        "**/*.synctex.gz": true,
+        "**/*.synctex(busy)": true,
+        "**/*.tmp": true,
+        "**/*.xref": true,
+        "**/*.fls": true,
+        "**/*.loc": true,
+        "**/*.run.xml": true,
+        "**/*.soc": true,
+        "**/*.snm": true,
+        "**/*.blg": true,
+        "**/*-SAVE-ERROR": true
+    },
+
+    "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
+    "latex-workshop.latex.outDir": "%DIR%/output",
+    "latex-workshop.latex.clean.subfolder.enabled": true,
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+    "latex-workshop.view.pdf.color.dark.backgroundColor": "#809080",
+    "latex-workshop.view.pdf.color.light.backgroundColor": "#809080",
+    "latex-workshop.view.pdf.color.dark.pageBorderColor": "#809080",
+    "latex-workshop.view.pdf.color.light.pageBorderColor": "#809080",
+    "latex-workshop.intellisense.update.aggressive.enabled": true,
+
+    "ltex.additionalRules.enablePickyRules": true,
+    "ltex.diagnosticSeverity": {
+        "default": "information",
+        "MORFOLOGIK_RULE_EN_US": "warning", // Spelling errors.
+        "PASSIVE_VOICE": "hint",
+        "ENGLISH_WORD_REPEAT_BEGINNING_RULE": "hint",
+        "TOO_LONG_SENTENCE": "hint"
+    },
+    "ltex.latex.commands": {
+        "\\tableofcontents[]": "ignore",
+        "\\@ifclassloaded{}{}{}": "ignore",
+        "\\includeonly{}": "ignore",
+        "\\texttt{}": "dummy", // Inline formatting for code.
+        "\\newbool{}": "ignore",
+        "\\setbool{}": "ignore",
+        "\\setbool{}{}": "ignore",
+        // Macros and environments definitions
+        "\\newcommand{}{}": "ignore",
+        "\\renewcommand{}{}": "ignore",
+        "\\newenvironment{}[][]{}{}": "ignore",
+        "\\newenvironment{}[]{}{}": "ignore",
+        "\\newenvironment{}": "ignore",
+        "\\NewDocumentCommand{}{}{}": "ignore",
+        "\\NewEnviron{}[]{}": "ignore",
+        "\\newtheoremstyle{}{}{}{}{}{}{}{}{}": "ignore",
+        "\\DeclarePairedDelimiterX{}[]{}{}": "ignore",
+        "\\DeclarePairedDelimiter{}{}{}": "ignore",
+        // Beamer
+        "\\setbeamertemplate{}[]{}": "ignore",
+        "\\setbeamercolor{}{}": "ignore",
+        "\\setbeamerfont{}{}": "ignore",
+        "\\usebeamercolor[]{}": "ignore",
+        "\\usebeamertemplate{}[]": "ignore",
+        "\\setbeamertemplate{}{}": "ignore",
+        "\\setbeamertemplate{}[]": "ignore",
+        "\\usebeamertemplate{}[]{}": "ignore",
+        "\\setbeamerfont{}": "ignore",
+        "\\addtolength{}{}": "ignore",
+        "\\movie{}{}": "ignore",
+        "\\movie[]{}{}": "ignore",
+        // Citations and references
+        "\\cite{}": "dummy",
+        "\\nocite{}": "ignore",
+        "\\cref[]{}": "dummy",
+        "\\crefformat{}{}": "ignore",
+        "\\Crefformat{}{}": "ignore",
+        "\\crefmultiformat{}{}{}{}{}": "ignore",
+        "\\Crefmultiformat{}{}{}{}{}": "ignore",
+        "\\crtcrefreference{}": "dummy",
+        // Changes annotations
+        "\\deleted{}": "ignore",
+        "\\TODO{}": "ignore",
+        "\\TODO[]{}": "ignore",
+        "\\randomized": "ignore",
+        "\\fixed": "ignore",
+    },
+    "ltex.bibtex.fields": {
+        "abstract": false
+    },
+
+    "pasteImage.path": "${workspaceFolder}/figures",
+    "pasteImage.insertPattern":
+        "\\begin{center}\n\t\t\\includegraphics[width=\\linewidth]{pasted-figures/${imageFileName}}\n\t\\end{center}",
+    "pasteImage.showFilePathConfirmInputBox": true,
+    "pasteImage.filePathConfirmInputBoxMode": "onlyName",
+    "pasteImage.defaultName": "${currentFileNameWithoutExt}-HH-mm-ss",
+    "pasteImage.encodePath": "none",
+
+}

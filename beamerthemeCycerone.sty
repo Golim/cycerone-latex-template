@@ -1,0 +1,341 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemeCycerone}[2026/07/28 v1.1 Cycerone native beamer theme]
+
+\RequirePackage{iftex}
+\RequirePackage{tikz}
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\RequirePackage{etoolbox}
+\RequirePackage{ifthen}
+\RequirePackage{ragged2e}
+\RequirePackage{hyperref}
+
+% ---------- Colours ----------
+\definecolor{cyDark}{HTML}{003A35}
+\definecolor{cyDarkTwo}{HTML}{073F3B}
+\definecolor{cyCream}{HTML}{F6FAF3}
+\definecolor{cyMint}{HTML}{38FFD5}
+\definecolor{cyMutedMint}{HTML}{80A9A2}
+\definecolor{cyLine}{HTML}{1B7970}
+\definecolor{cyText}{HTML}{072828}
+\definecolor{cyPale}{HTML}{D6E6DF}
+\definecolor{cyBlock}{HTML}{0D4D4F}
+\definecolor{cyAlertBlock}{HTML}{FCE8E8}
+\definecolor{cyInlineCode}{HTML}{EAF4F1}
+
+% ---------- Fonts ----------
+\ifPDFTeX
+	\RequirePackage[T1]{fontenc}
+	\RequirePackage{lmodern}
+\else
+	\RequirePackage{fontspec}
+	\defaultfontfeatures{Ligatures=TeX}
+	\IfFontExistsTF{Sora}{%
+		\setsansfont{Sora}%
+	}{%
+		\IfFileExists{fonts/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf}{%
+			\setsansfont[Path=fonts/]{GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf}%
+		}{%
+			\IfFontExistsTF{Google Sans Flex}{\setsansfont{Google Sans Flex}}{\IfFontExistsTF{Aptos}{\setsansfont{Aptos}}{\IfFontExistsTF{Noto Sans}{\setsansfont{Noto Sans}}{\setsansfont{DejaVu Sans}}}}%
+		}%
+	}
+\fi
+\renewcommand{\familydefault}{\sfdefault}
+
+% ---------- User configuration ----------
+\newcommand{\cyProjectLogoDarkFile}{figures/cycerone-logo.png}
+\newcommand{\cyProjectLogoLightFile}{figures/cycerone-logo-light.png}
+\newcommand{\cyEULogoFile}{figures/eu-logo.png}
+\newcommand{\cyTitleGraphicFile}{figures/unitn-logo.png}
+\newcommand{\cyEventName}{University of Trento}
+\newcommand{\cyWebsite}{https://cycerone.eu/en}
+\newcommand{\cyEmail}{cycerone.project@unitn.it}
+\newcommand{\cyContactName}{\insertauthor}
+\newcommand{\cyContactWebsite}{\cyWebsite}
+\newcommand{\cyContactEmail}{\cyEmail}
+\newcommand{\cyLinkedInURL}{https://www.linkedin.com/}
+\newcommand{\cyYouTubeURL}{https://www.youtube.com/}
+\newcommand{\cyDate}{\today}
+
+% Change asset paths and contact details here, or call these commands after \usetheme.
+\newcommand{\cysetprojectlogo}[1]{\renewcommand{\cyProjectLogoDarkFile}{#1}}
+\newcommand{\cyseteulogo}[1]{\renewcommand{\cyEULogoFile}{#1}}
+\newcommand{\cysettitlegraphic}[1]{\renewcommand{\cyTitleGraphicFile}{#1}}
+\newcommand{\cysetevent}[1]{\renewcommand{\cyEventName}{#1}}
+\newcommand{\cysetwebsite}[1]{\renewcommand{\cyWebsite}{#1}}
+\newcommand{\cysetemail}[1]{\renewcommand{\cyEmail}{#1}}
+\newcommand{\cysetcontactname}[1]{\renewcommand{\cyContactName}{#1}}
+\newcommand{\cysetcontactwebsite}[1]{\renewcommand{\cyContactWebsite}{#1}}
+\newcommand{\cysetcontactemail}[1]{\renewcommand{\cyContactEmail}{#1}}
+\newcommand{\cysetlinkedin}[1]{\renewcommand{\cyLinkedInURL}{#1}}
+\newcommand{\cysetyoutube}[1]{\renewcommand{\cyYouTubeURL}{#1}}
+\newcommand{\cysetdate}[1]{\renewcommand{\cyDate}{#1}}
+
+% ---------- Beamer base ----------
+\mode<presentation>{
+	\usetheme{default}
+	\useinnertheme{default}
+	\useoutertheme{default}
+	\setbeamertemplate{navigation symbols}{}
+	\setbeamertemplate{headline}{}
+}
+
+\setbeamercolor{normal text}{fg=cyText,bg=cyCream}
+\setbeamercolor{structure}{fg=cyDark}
+\setbeamercolor{itemize item}{fg=cyDark}
+\setbeamercolor{itemize subitem}{fg=cyDark}
+% Tune ordinary-frame left/right margins here.
+\setbeamersize{text margin left=9mm,text margin right=9mm}
+\setbeamerfont{title}{size=\fontsize{38}{43}\selectfont,series=\mdseries}
+\setbeamerfont{frametitle}{size=\fontsize{30}{35}\selectfont,series=\mdseries}
+\setbeamerfont{normal text}{size=\fontsize{16}{20}\selectfont}
+\setbeamertemplate{itemize item}{\raise0.25ex\hbox{\tiny$\bullet$}}
+\setbeamertemplate{itemize subitem}{\raise0.20ex\hbox{\tiny$\bullet$}}
+
+% ---------- Blocks and inline code ----------
+\setbeamercolor{block title}{fg=white,bg=cyBlock}
+\setbeamercolor{block body}{fg=white,bg=cyBlock}
+\setbeamercolor{block title alerted}{fg=cyText,bg=cyAlertBlock}
+\setbeamercolor{block body alerted}{fg=cyText,bg=cyAlertBlock}
+\setbeamerfont{block title}{series=\bfseries}
+\setbeamerfont{block title alerted}{series=\bfseries}
+\defbeamertemplate{block begin}{cycerone}{%
+	\begin{beamercolorbox}[wd=\textwidth,rounded=true,shadow=false,sep=1.2ex]{block body}%
+		{\usebeamerfont{block title}\usebeamercolor[fg]{block title}\insertblocktitle\par}\vspace{0.45ex}%
+		\usebeamerfont{block body}\usebeamercolor[fg]{block body}%
+}
+\defbeamertemplate{block end}{cycerone}{\end{beamercolorbox}}
+\defbeamertemplate{block alerted begin}{cycerone}{%
+	\begin{beamercolorbox}[wd=\textwidth,rounded=true,shadow=false,sep=1.2ex]{block body alerted}%
+		{\usebeamerfont{block title alerted}\usebeamercolor[fg]{block title alerted}\insertblocktitle\par}\vspace{0.45ex}%
+		\usebeamerfont{block body alerted}\usebeamercolor[fg]{block body alerted}%
+}
+\defbeamertemplate{block alerted end}{cycerone}{\end{beamercolorbox}}
+\setbeamertemplate{block begin}[cycerone]
+\setbeamertemplate{block end}[cycerone]
+\setbeamertemplate{block alerted begin}[cycerone]
+\setbeamertemplate{block alerted end}[cycerone]
+\renewcommand{\texttt}[1]{{\setlength{\fboxsep}{1.2pt}\colorbox{cyInlineCode}{\strut\color{cyText}\ttfamily #1}}}
+
+% ---------- Helpers ----------
+\newcommand{\cyLogoPlaceholder}[2]{%
+	\begin{tikzpicture}[baseline=(x.base)]
+		\node[draw=#1, rounded corners=1.5pt, inner xsep=3mm, inner ysep=2mm,
+			minimum width=22mm, minimum height=10mm, align=center, text=#1,
+			font=\normalfont\scriptsize] (x) {#2};
+	\end{tikzpicture}%
+}
+
+\newcommand{\cyProjectLogoDark}[1][16mm]{%
+	\IfFileExists{\cyProjectLogoDarkFile}{\includegraphics[height=#1]{\cyProjectLogoDarkFile}}{\cyLogoPlaceholder{cyDark}{PROJECT\\LOGO}}%
+}
+\newcommand{\cyProjectLogoLight}[1][16mm]{%
+	\IfFileExists{\cyProjectLogoLightFile}{\includegraphics[height=#1]{\cyProjectLogoLightFile}}{\cyLogoPlaceholder{cyCream}{PROJECT\\LOGO}}%
+}
+\newcommand{\cyProjectLogo}[1][16mm]{%
+	\cyProjectLogoDark[#1]%
+}
+\newcommand{\cyEULogo}[1][10mm]{%
+	\IfFileExists{\cyEULogoFile}{\includegraphics[height=#1]{\cyEULogoFile}}{\cyLogoPlaceholder{blue!70!black}{EU\\LOGO}}%
+}
+\newcommand{\cyTitleGraphic}[1][11mm]{%
+	\IfFileExists{\cyTitleGraphicFile}{\includegraphics[width=#1,height=#1,keepaspectratio]{\cyTitleGraphicFile}}{}%
+}
+
+% Tune the top-right logo inset and height here.
+\newcommand{\cyTopLogoDark}{%
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=north east] at ([xshift=-1.5mm,yshift=-1.5mm]current page.north east) {\cyProjectLogoLight[14mm]};
+	\end{tikzpicture}%
+}
+\newcommand{\cyTopLogoLight}{%
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=north east] at ([xshift=-1.5mm,yshift=-1.5mm]current page.north east) {\cyProjectLogoDark[14mm]};
+	\end{tikzpicture}%
+}
+
+\newcommand{\cyCirclesArtwork}{%
+	\node[anchor=east, inner sep=0pt] at ([xshift=6mm]current page.east) {\includegraphics[height=1.1\paperheight]{figures/cycerone-circles-large.png}};
+}
+
+\newcommand{\cyCircuitBackgroundDark}{%
+	\begin{tikzpicture}[remember picture,overlay]
+		\fill[cyDark] (current page.south west) rectangle (current page.north east);
+		\cyCirclesArtwork
+	\end{tikzpicture}%
+}
+
+\newcommand{\cyCircuitBackgroundLight}{%
+	\begin{tikzpicture}[remember picture,overlay]
+		\fill[cyCream] (current page.south west) rectangle (current page.north east);
+		\cyCirclesArtwork
+	\end{tikzpicture}%
+}
+
+\newcommand{\cyHeaderTag}[1]{%
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=south, text=cyMutedMint, font=\normalfont\fontsize{7}{8}\selectfont] at ([yshift=4mm]current page.south) {\insertauthor\quad|\quad\MakeUppercase{#1}};
+	\end{tikzpicture}%
+}
+
+\newcommand{\cyLogoBanner}{%
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=north west, fill=cyCream, rounded corners=3pt, minimum width=55mm, minimum height=18mm,
+			inner xsep=4mm] at ([xshift=8mm,yshift=-7mm]current page.north west) {\cyProjectLogoDark[14mm]\hspace{12mm}\cyEULogo[10mm]};
+	\end{tikzpicture}%
+}
+
+\newcommand{\cyAgendaPage}[1]{%
+	\cyCircuitBackgroundDark\cyTopLogoDark\cyHeaderTag{Agenda}%
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=west, text=cyMutedMint, align=left, font=\normalfont\fontsize{23}{28}\selectfont] at ([xshift=9mm,yshift=-4mm]current page.west) {Today's\\AGENDA};
+		\node[anchor=north west, text=cyCream, align=left] at ([xshift=52mm,yshift=-27mm]current page.north west) {\begin{minipage}{70mm}\cyAgendaList{#1}\end{minipage}};
+	\end{tikzpicture}%
+}
+
+\newcommand{\cySectionPage}[3]{%
+	\cyCircuitBackgroundDark\cyTopLogoDark
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{41}{45}\selectfont] at ([xshift=9mm,yshift=48mm]current page.south west) {#1};
+		\node[anchor=west, text=cyCream, align=left, font=\normalfont\fontsize{52}{58}\selectfont] at ([xshift=9mm,yshift=33mm]current page.south west) {#2};
+		\node[anchor=south east, text=cyMint, align=right, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=-13mm,yshift=17mm]current page.south east) {#3};
+	\end{tikzpicture}%
+}
+
+\newcommand{\cyTitleLogoBanner}{%
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=north west, fill=cyCream, rounded corners=3pt, minimum width=64mm, minimum height=22mm,
+			inner xsep=4mm] at ([xshift=8mm,yshift=-7mm]current page.north west) {\raisebox{0.8mm}{\cyProjectLogoDark[18mm]}\hspace{10mm}\raisebox{2.2mm}{\cyEULogo[12mm]}};
+	\end{tikzpicture}%
+}
+
+\newcommand{\cyThanksPage}{%
+	\begin{tikzpicture}[remember picture,overlay]
+		\fill[cyDark] (current page.south west) rectangle (current page.north east);
+		\cyCirclesArtwork
+	\end{tikzpicture}%
+	\cyLogoBanner
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=west, text=cyCream, font=\normalfont\fontsize{55}{61}\selectfont] at ([xshift=9mm,yshift=8mm]current page.west) {Thank You!};
+		% Tune the contact block position with the yshifts below.
+		\node[anchor=west, text=cyCream, align=left, font=\normalfont\fontsize{23}{28}\selectfont] at ([xshift=9mm,yshift=27mm]current page.south west) {GET IN TOUCH\\WITH US};
+		\node[anchor=west, text=cyMint, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=33mm,yshift=15mm]current page.south west) {\cyWebsite};
+		\node[anchor=west, text=cyCream, align=left, font=\normalfont\fontsize{8}{11}\selectfont] at ([xshift=69mm,yshift=27mm]current page.south west) {\rule{25mm}{1.2mm}\\\cyContactName\\\href{mailto:\cyContactEmail}{\cyContactEmail}\\\href{\cyContactWebsite}{\cyContactWebsite}\\\href{\cyLinkedInURL}{LinkedIn}\\\href{\cyYouTubeURL}{YouTube}};
+	\end{tikzpicture}%
+}
+
+% ---------- Frame commands ----------
+\newcommand{\cyTitleFrame}[3][]{%
+	{\setbeamercolor{background canvas}{bg=cyDark}%
+	\begin{frame}[plain]
+		\begin{tikzpicture}[remember picture,overlay]
+			\fill[cyDark] (current page.south west) rectangle ([xshift=-80mm]current page.north east);
+			\fill[cyCream] ([xshift=-80mm]current page.south east) rectangle (current page.north east);
+			\cyCirclesArtwork
+		\end{tikzpicture}
+		\cyTitleLogoBanner
+		\begin{tikzpicture}[remember picture,overlay]
+			\node[anchor=west, text=cyMint, font=\normalfont\fontsize{7}{8}\selectfont] at ([xshift=9mm,yshift=-40mm]current page.north west) {\MakeUppercase{\cyEventName}};
+			\node[anchor=north west, text=cyCream, align=left, text width=72mm, font=\normalfont\fontsize{17}{20}\selectfont] at ([xshift=9mm,yshift=-28mm]current page.north west) {\parbox[t]{72mm}{#2}};
+			\node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=9mm,yshift=12mm]current page.south west) {#3};
+			\IfFileExists{#1}{%
+				\node[anchor=south east, circle, fill=white, draw=white, minimum size=18mm, inner sep=1.8mm]
+					at ([xshift=-10mm,yshift=10mm]current page.south east) {\includegraphics[width=11mm,height=11mm,keepaspectratio]{#1}};
+			}{%
+				\node[anchor=south east, circle, fill=white, draw=white, minimum size=18mm, inner sep=1.8mm]
+					at ([xshift=-10mm,yshift=10mm]current page.south east) {\cyLogoPlaceholder{cyDark}{#1}};
+			}%
+		\end{tikzpicture}
+	\end{frame}}
+}
+
+\newcommand{\cyAgendaFrame}[1]{%
+	{\setbeamercolor{background canvas}{bg=cyDark}%
+	\begin{frame}[plain]
+		\cyAgendaPage{#1}
+	\end{frame}}
+}
+
+\newcounter{cyagendaitem}
+\newcommand{\cyAgendaList}[1]{%
+	\setcounter{cyagendaitem}{0}%
+	\renewcommand*{\do}[1]{%
+		\stepcounter{cyagendaitem}%
+		\noindent\begin{tabular*}{70mm}{@{}p{48mm}@{\extracolsep{\fill}}r@{}}
+			{\fontsize{22}{26}\selectfont ##1} & {\fontsize{28}{31}\selectfont\color{cyMint}\ifnum\value{cyagendaitem}<10 0\fi\arabic{cyagendaitem}}
+		\end{tabular*}\par\vspace{2mm}{\color{cyLine}\rule{70mm}{0.3pt}}\par\vspace{2mm}%
+	}\docsvlist{#1}%
+}
+
+\newcommand{\cySectionFrame}[3]{%
+	{\setbeamercolor{background canvas}{bg=cyDark}%
+	\begin{frame}[plain]
+		\cySectionPage{#1}{#2}{#3}
+	\end{frame}}
+}
+
+\newcommand{\cyPlainFrame}[3][]{%
+	{\setbeamercolor{background canvas}{bg=cyCream}%
+	\begin{frame}[plain]
+		\cyCircuitBackgroundLight\cyTopLogoLight\cyHeaderTag{#1}
+		\begin{tikzpicture}[remember picture,overlay]
+			\node[anchor=north west, text=cyText, align=left, font=\normalfont\fontsize{31}{36}\selectfont] at ([xshift=9mm,yshift=-29mm]current page.north west) {#2};
+			\node[anchor=north west, text=cyText, align=left] at ([xshift=10mm,yshift=-61mm]current page.north west) {\begin{minipage}{100mm}#3\end{minipage}};
+		\end{tikzpicture}
+	\end{frame}}
+}
+
+\newcommand{\cyImageFrame}[4][]{%
+	{\setbeamercolor{background canvas}{bg=cyCream}%
+	\begin{frame}[plain]
+		\cyCircuitBackgroundLight\cyTopLogoLight\cyHeaderTag{#1}
+		\begin{tikzpicture}[remember picture,overlay]
+			\node[anchor=north west, text=cyText, align=left, font=\normalfont\fontsize{29}{34}\selectfont] at ([xshift=9mm,yshift=-29mm]current page.north west) {#2};
+			\node[anchor=north west, text=cyText, align=left] at ([xshift=10mm,yshift=-61mm]current page.north west) {\begin{minipage}{52mm}#3\end{minipage}};
+			\node[anchor=north east, rounded corners=5pt, fill=black!10, minimum width=57mm, minimum height=56mm, text=cyMutedMint, align=center]
+				at ([xshift=-8mm,yshift=-28mm]current page.north east)
+				{\IfFileExists{#4}{\includegraphics[width=57mm,height=56mm,keepaspectratio]{#4}}{\Large image\\placeholder}};
+		\end{tikzpicture}
+	\end{frame}}
+}
+
+\newcommand{\cyThanksFrame}{%
+	{\setbeamercolor{background canvas}{bg=cyDark}%
+	\begin{frame}[plain]
+		\cyThanksPage
+	\end{frame}}
+}
+
+% ---------- Ordinary frames ----------
+\defbeamertemplate*{footline}{cycerone}{%
+	\ifnum\value{framenumber}>1\relax
+		\leavevmode\hbox{\begin{beamercolorbox}[wd=\paperwidth,ht=4mm,dp=1.5mm,leftskip=9mm,rightskip=9mm]{author in head/foot}%
+			\usebeamerfont{author in head/foot}\color{cyMutedMint}\fontsize{7}{8}\selectfont\insertauthor\hfill\insertsectionhead%
+		\end{beamercolorbox}}%
+	\fi
+}
+\setbeamertemplate{footline}[cycerone]
+
+\defbeamertemplate*{frametitle}{cycerone}{%
+	\cyTopLogoLight%
+	% Tune title/content vertical spacing with these two values.
+	\vspace{-1.5mm}{\parbox[t]{\dimexpr\paperwidth-18mm\relax}{\raggedright\normalfont\fontsize{24}{28}\selectfont\color{cyText}\insertframetitle}}\par\vspace{0.5mm}%
+}
+\setbeamertemplate{frametitle}[cycerone]
+
+\setbeamertemplate{title page}{%
+	\begin{tikzpicture}[remember picture,overlay]
+		\fill[cyDark] (current page.south west) rectangle ([xshift=-80mm]current page.north east);
+		\fill[cyCream] ([xshift=-80mm]current page.south east) rectangle (current page.north east);
+		\cyCirclesArtwork
+	\end{tikzpicture}%
+	\cyTitleLogoBanner
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=west, text=cyMint, font=\normalfont\fontsize{7}{8}\selectfont] at ([xshift=9mm,yshift=-40mm]current page.north west) {\MakeUppercase{\cyEventName}};
+		\node[anchor=north west, text=cyCream, align=left, font=\normalfont\fontsize{17}{20}\selectfont, inner sep=0pt] at ([xshift=9mm,yshift=-56mm]current page.north west) {\shortstack[l]{\inserttitle}};
+		\node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=9mm,yshift=18mm]current page.south west) {\insertauthor};
+		\node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=9mm,yshift=10mm]current page.south west) {\insertdate};
+		\node[anchor=south east, circle, fill=white, draw=white, minimum size=18mm, inner sep=1.8mm]
+			at ([xshift=-86mm,yshift=6mm]current page.south east) {\cyTitleGraphic};
+	\end{tikzpicture}%
+}

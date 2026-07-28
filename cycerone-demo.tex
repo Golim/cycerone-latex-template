@@ -1,0 +1,96 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usetheme{Cycerone}
+
+\cysetprojectlogo{figures/cycerone-logo.png}
+\cyseteulogo{figures/eu-logo.png}
+\cysetevent{Course Name}
+\cysetdate{\today}
+\cysetwebsite{https://cycerone.eu/en}
+\cysetemail{info@cycerone.eu}
+
+\renewcommand{\cyTopLogoDark}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east] at ([xshift=-4mm,yshift=-1mm]current page.north east) {\cyProjectLogoLight[11mm]};
+  \end{tikzpicture}%
+}
+\renewcommand{\cyTopLogoLight}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east] at ([xshift=-4mm,yshift=-1mm]current page.north east) {\cyProjectLogoDark[11mm]};
+  \end{tikzpicture}%
+}
+\renewcommand{\cyHeaderTag}[1]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east, text=cyMutedMint, font=\normalfont\fontsize{7}{8}\selectfont, align=right] at ([xshift=-4mm,yshift=-13mm]current page.north east) {\MakeUppercase{#1}};
+  \end{tikzpicture}%
+}
+
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  framerule=0pt,
+}
+
+\titlegraphic{\includegraphics[height=11mm]{figures/unitn-logo.png}}
+\title{Title of the Presentation}
+\author{CYCERONE}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+\begin{frame}[plain]
+  \cyAgendaPage{Topic 1,Topic 2,Topic 3,Topic 4}
+\end{frame}
+
+\section{Topic 1}
+
+\begin{frame}[plain]
+  \cySectionPage{01}{Introduction}{Keyword 1\qquad Keyword 2\qquad Keyword 3}
+\end{frame}
+
+\begin{frame}{Slide with a Picture}
+\begin{columns}[T,onlytextwidth]
+  \column{.47\textwidth}
+  \begin{itemize}
+    \item Add here your bullet points.
+    \item And here with \textcolor{cyLine}{highlight}.
+    \item And here.
+  \end{itemize}
+
+  \column{.48\textwidth}
+  \includegraphics[width=\linewidth]{example-image}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Slide with a Block}
+  \begin{block}{Block title}
+    This is a simple block.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Slide with an Alert Block}
+  \begin{alertblock}{Alert block title}
+    This is an alert block.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Slide with Some Code}
+\begin{lstlisting}[language=Python]
+def hello_world():
+    print("Hello, world!")
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[plain]
+  \cyThanksPage
+\end{frame}
+
+\end{document}

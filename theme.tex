@@ -1,0 +1,23 @@
+% Use the local Cycerone theme with minimal lecture-specific overrides.
+\usetheme{Cycerone}
+
+\usetikzlibrary{decorations.pathreplacing}
+
+% Keep the lecture title page subtitle visible while reusing the Cycerone look.
+\setbeamertemplate{title page}{%
+    \begin{tikzpicture}[remember picture,overlay]
+        \fill[cyDark] (current page.south west) rectangle ([xshift=-80mm]current page.north east);
+        \fill[cyCream] ([xshift=-80mm]current page.south east) rectangle (current page.north east);
+        \cyCirclesArtwork
+    \end{tikzpicture}%
+    \cyTitleLogoBanner
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[anchor=west, text=cyMint, font=\normalfont\fontsize{7}{8}\selectfont] at ([xshift=9mm,yshift=-34mm]current page.north west) {\MakeUppercase{\cyEventName}};
+        \node[anchor=north west, text=cyCream, align=left, text width=64mm, font=\normalfont\fontsize{22}{26}\selectfont, inner sep=0pt] at ([xshift=9mm,yshift=-42mm]current page.north west) {\parbox[t]{64mm}{\inserttitle\\[1.5mm]{\fontsize{12}{15}\selectfont\insertsubtitle}}};
+        \node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=9mm,yshift=18mm]current page.south west) {\insertauthor};
+        \node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=9mm,yshift=10mm]current page.south west) {\insertdate};
+        % Tune the title-page badge position and diameter here.
+        \node[anchor=south east, circle, fill=white, draw=white, minimum size=18mm, inner sep=1.8mm]
+            at ([xshift=-74mm,yshift=6mm]current page.south east) {\cyTitleGraphic};
+    \end{tikzpicture}%
+}
