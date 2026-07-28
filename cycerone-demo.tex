@@ -46,14 +46,25 @@
   \titlepage
 \end{frame}
 
+% cyAgendaPage automatically refence all the sections in the presentation.
 \begin{frame}[plain]
-  \cyAgendaPage{Topic 1,Topic 2,Topic 3,Topic 4}
+  \cyAgendaPage
 \end{frame}
 
-\section{Topic 1}
+\section{Introduction}
 
+% cySectionPage fields:
+% 1. TItle size (optional, default 30)
+% 2. Section number
+% 3. Section title
+% 4. Keywords (optional - empty field if not needed)
+% 5. Height (y) of the section number (optional, default: 60mm)
+% 6. Height (y) of the section title (optional, default: 38mm)
 \begin{frame}[plain]
-  \cySectionPage{01}{Introduction}{Keyword 1\qquad Keyword 2\qquad Keyword 3}
+  \cySectionPage[40]{01}{Introduction}{Keyword 1\qquad Keyword 2\qquad Keyword 3}
+  % \cySectionPage[28]{01}{Introduction}{Keyword 1 \qquad Keyword 2}[58mm][38mm]
+  % \cySectionPage{01}{Introduction}{Keyword 1 \qquad Keyword 2}[][38mm]
+  % \cySectionPage{01}{Introduction}{}
 \end{frame}
 
 \begin{frame}{Slide with a Picture}

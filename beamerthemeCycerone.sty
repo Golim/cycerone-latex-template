@@ -9,6 +9,7 @@
 \RequirePackage{ifthen}
 \RequirePackage{ragged2e}
 \RequirePackage{hyperref}
+\RequirePackage{xparse}
 
 % ---------- Colours ----------
 \definecolor{cyDark}{HTML}{003A35}
@@ -103,14 +104,14 @@
 	\begin{beamercolorbox}[wd=\textwidth,rounded=true,shadow=false,sep=1.2ex]{block body}%
 		{\usebeamerfont{block title}\usebeamercolor[fg]{block title}\insertblocktitle\par}\vspace{0.45ex}%
 		\usebeamerfont{block body}\usebeamercolor[fg]{block body}%
-}
-\defbeamertemplate{block end}{cycerone}{\end{beamercolorbox}}
+		}
+		\defbeamertemplate{block end}{cycerone}{\end{beamercolorbox}}
 \defbeamertemplate{block alerted begin}{cycerone}{%
 	\begin{beamercolorbox}[wd=\textwidth,rounded=true,shadow=false,sep=1.2ex]{block body alerted}%
 		{\usebeamerfont{block title alerted}\usebeamercolor[fg]{block title alerted}\insertblocktitle\par}\vspace{0.45ex}%
 		\usebeamerfont{block body alerted}\usebeamercolor[fg]{block body alerted}%
-}
-\defbeamertemplate{block alerted end}{cycerone}{\end{beamercolorbox}}
+		}
+		\defbeamertemplate{block alerted end}{cycerone}{\end{beamercolorbox}}
 \setbeamertemplate{block begin}[cycerone]
 \setbeamertemplate{block end}[cycerone]
 \setbeamertemplate{block alerted begin}[cycerone]
@@ -185,20 +186,61 @@
 	\end{tikzpicture}%
 }
 
-\newcommand{\cyAgendaPage}[1]{%
+\newcommand{\cyAgendaStoreSection}[1]{}
+\newcommand{\cyAgendaAddSection}[1]{}
+
+\newcommand{\cyAgendaPage}[1][]{%
 	\cyCircuitBackgroundDark\cyTopLogoDark\cyHeaderTag{Agenda}%
 	\begin{tikzpicture}[remember picture,overlay]
 		\node[anchor=west, text=cyMutedMint, align=left, font=\normalfont\fontsize{23}{28}\selectfont] at ([xshift=9mm,yshift=-4mm]current page.west) {Today's\\AGENDA};
-		\node[anchor=north west, text=cyCream, align=left] at ([xshift=52mm,yshift=-27mm]current page.north west) {\begin{minipage}{70mm}\cyAgendaList{#1}\end{minipage}};
+		\node[anchor=north west, text=cyCream, align=left] at ([xshift=52mm,yshift=-27mm]current page.north west) {%
+			\begin{minipage}[t]{70mm}
+				\setbeamertemplate{section in toc}{%
+					\vspace{1.2mm}%
+					\parbox[t]{\linewidth}{%
+						\raggedright
+						\fontsize{13}{15}\selectfont
+						\textcolor{cyMint}{\ifnum\inserttocsectionnumber<10 0\fi\inserttocsectionnumber}%%
+						\hspace{0.9em}\textcolor{cyCream}{\inserttocsection}
+					}%
+				}%
+				\setbeamertemplate{subsection in toc}{}
+				\setbeamertemplate{section in toc shaded}{%
+					\vspace{1.2mm}%
+					\parbox[t]{\linewidth}{%
+						\raggedright
+						\fontsize{13}{15}\selectfont
+						\textcolor{cyCream}{\inserttocsection}
+					}%
+				}%
+				\if\relax\detokenize{#1}\relax
+					\tableofcontents[hideallsubsections]
+				\else
+					\cyAgendaList{#1}
+				\fi
+			\end{minipage}%;
+		};
 	\end{tikzpicture}%
 }
 
-\newcommand{\cySectionPage}[3]{%
+\NewDocumentCommand{\cySectionPage}{ O{30} m m m O{60mm} O{40mm} }{
 	\cyCircuitBackgroundDark\cyTopLogoDark
 	\begin{tikzpicture}[remember picture,overlay]
-		\node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{41}{45}\selectfont] at ([xshift=9mm,yshift=48mm]current page.south west) {#1};
-		\node[anchor=west, text=cyCream, align=left, font=\normalfont\fontsize{52}{58}\selectfont] at ([xshift=9mm,yshift=33mm]current page.south west) {#2};
-		\node[anchor=south east, text=cyMint, align=right, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=-13mm,yshift=17mm]current page.south east) {#3};
+		\sbox0{\parbox[t]{0.86\paperwidth}{\raggedright\fontsize{#1pt}{\dimexpr#1pt+4pt\relax}\selectfont #3}}%
+		\newdimen\cySectionTitleHeight
+		\cySectionTitleHeight=\dimexpr\ht0+\dp0\relax
+		\newdimen\cySectionTitleShift
+		\cySectionTitleShift=0pt
+		\ifdim\cySectionTitleHeight>26mm
+			\cySectionTitleShift=\dimexpr\cySectionTitleHeight-26mm\relax
+		\fi
+		\edef\cySectionNumberYShift{\the\dimexpr#5-\cySectionTitleShift\relax}
+		\edef\cySectionTitleYShift{\the\dimexpr#6-\cySectionTitleShift\relax}
+		\node[anchor=west, text=cyMutedMint, align=left, font=\normalfont\fontsize{41}{45}\selectfont] at ([xshift=9mm,yshift=\cySectionNumberYShift]current page.south west) {#2};
+		\node[anchor=west, text=cyCream, align=left] at ([xshift=9mm,yshift=\cySectionTitleYShift]current page.south west) {\parbox[t]{0.86\paperwidth}{\raggedright\fontsize{#1pt}{\dimexpr#1pt+4pt\relax}\selectfont #3}};
+		\if\relax\detokenize{#4}\relax\else
+			\node[anchor=south east, text=cyMint, align=right] at ([xshift=-13mm,yshift=17mm]current page.south east) {\parbox[t]{0.48\paperwidth}{\raggedright\fontsize{8}{10}\selectfont #4}};
+		\fi
 	\end{tikzpicture}%
 }
 
@@ -227,33 +269,33 @@
 % ---------- Frame commands ----------
 \newcommand{\cyTitleFrame}[3][]{%
 	{\setbeamercolor{background canvas}{bg=cyDark}%
-	\begin{frame}[plain]
-		\begin{tikzpicture}[remember picture,overlay]
-			\fill[cyDark] (current page.south west) rectangle ([xshift=-80mm]current page.north east);
-			\fill[cyCream] ([xshift=-80mm]current page.south east) rectangle (current page.north east);
-			\cyCirclesArtwork
-		\end{tikzpicture}
-		\cyTitleLogoBanner
-		\begin{tikzpicture}[remember picture,overlay]
-			\node[anchor=west, text=cyMint, font=\normalfont\fontsize{7}{8}\selectfont] at ([xshift=9mm,yshift=-40mm]current page.north west) {\MakeUppercase{\cyEventName}};
-			\node[anchor=north west, text=cyCream, align=left, text width=72mm, font=\normalfont\fontsize{17}{20}\selectfont] at ([xshift=9mm,yshift=-28mm]current page.north west) {\parbox[t]{72mm}{#2}};
-			\node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=9mm,yshift=12mm]current page.south west) {#3};
-			\IfFileExists{#1}{%
-				\node[anchor=south east, circle, fill=white, draw=white, minimum size=18mm, inner sep=1.8mm]
-					at ([xshift=-10mm,yshift=10mm]current page.south east) {\includegraphics[width=11mm,height=11mm,keepaspectratio]{#1}};
-			}{%
-				\node[anchor=south east, circle, fill=white, draw=white, minimum size=18mm, inner sep=1.8mm]
-					at ([xshift=-10mm,yshift=10mm]current page.south east) {\cyLogoPlaceholder{cyDark}{#1}};
-			}%
-		\end{tikzpicture}
-	\end{frame}}
+			\begin{frame}[plain]
+				\begin{tikzpicture}[remember picture,overlay]
+					\fill[cyDark] (current page.south west) rectangle ([xshift=-80mm]current page.north east);
+					\fill[cyCream] ([xshift=-80mm]current page.south east) rectangle (current page.north east);
+					\cyCirclesArtwork
+				\end{tikzpicture}
+				\cyTitleLogoBanner
+				\begin{tikzpicture}[remember picture,overlay]
+					\node[anchor=west, text=cyMint, font=\normalfont\fontsize{7}{8}\selectfont] at ([xshift=9mm,yshift=-40mm]current page.north west) {\MakeUppercase{\cyEventName}};
+					\node[anchor=north west, text=cyCream, align=left, text width=72mm, font=\normalfont\fontsize{17}{20}\selectfont] at ([xshift=9mm,yshift=-28mm]current page.north west) {\parbox[t]{72mm}{#2}};
+					\node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=9mm,yshift=12mm]current page.south west) {#3};
+					\IfFileExists{#1}{%
+						\node[anchor=south east, circle, fill=white, draw=white, minimum size=18mm, inner sep=1.8mm]
+						at ([xshift=-10mm,yshift=10mm]current page.south east) {\includegraphics[width=11mm,height=11mm,keepaspectratio]{#1}};
+					}{%
+						\node[anchor=south east, circle, fill=white, draw=white, minimum size=18mm, inner sep=1.8mm]
+						at ([xshift=-10mm,yshift=10mm]current page.south east) {\cyLogoPlaceholder{cyDark}{#1}};
+					}%
+				\end{tikzpicture}
+			\end{frame}}
 }
 
 \newcommand{\cyAgendaFrame}[1]{%
 	{\setbeamercolor{background canvas}{bg=cyDark}%
-	\begin{frame}[plain]
-		\cyAgendaPage{#1}
-	\end{frame}}
+			\begin{frame}[plain]
+				\cyAgendaPage{#1}
+			\end{frame}}
 }
 
 \newcounter{cyagendaitem}
@@ -269,49 +311,49 @@
 
 \newcommand{\cySectionFrame}[3]{%
 	{\setbeamercolor{background canvas}{bg=cyDark}%
-	\begin{frame}[plain]
-		\cySectionPage{#1}{#2}{#3}
-	\end{frame}}
+			\begin{frame}[plain]
+				\cySectionPage{#1}{#2}{#3}
+			\end{frame}}
 }
 
 \newcommand{\cyPlainFrame}[3][]{%
 	{\setbeamercolor{background canvas}{bg=cyCream}%
-	\begin{frame}[plain]
-		\cyCircuitBackgroundLight\cyTopLogoLight\cyHeaderTag{#1}
-		\begin{tikzpicture}[remember picture,overlay]
-			\node[anchor=north west, text=cyText, align=left, font=\normalfont\fontsize{31}{36}\selectfont] at ([xshift=9mm,yshift=-29mm]current page.north west) {#2};
-			\node[anchor=north west, text=cyText, align=left] at ([xshift=10mm,yshift=-61mm]current page.north west) {\begin{minipage}{100mm}#3\end{minipage}};
-		\end{tikzpicture}
-	\end{frame}}
+			\begin{frame}[plain]
+				\cyCircuitBackgroundLight\cyTopLogoLight\cyHeaderTag{#1}
+				\begin{tikzpicture}[remember picture,overlay]
+					\node[anchor=north west, text=cyText, align=left, font=\normalfont\fontsize{31}{36}\selectfont] at ([xshift=9mm,yshift=-29mm]current page.north west) {#2};
+					\node[anchor=north west, text=cyText, align=left] at ([xshift=10mm,yshift=-61mm]current page.north west) {\begin{minipage}{100mm}#3\end{minipage}};
+				\end{tikzpicture}
+			\end{frame}}
 }
 
 \newcommand{\cyImageFrame}[4][]{%
 	{\setbeamercolor{background canvas}{bg=cyCream}%
-	\begin{frame}[plain]
-		\cyCircuitBackgroundLight\cyTopLogoLight\cyHeaderTag{#1}
-		\begin{tikzpicture}[remember picture,overlay]
-			\node[anchor=north west, text=cyText, align=left, font=\normalfont\fontsize{29}{34}\selectfont] at ([xshift=9mm,yshift=-29mm]current page.north west) {#2};
-			\node[anchor=north west, text=cyText, align=left] at ([xshift=10mm,yshift=-61mm]current page.north west) {\begin{minipage}{52mm}#3\end{minipage}};
-			\node[anchor=north east, rounded corners=5pt, fill=black!10, minimum width=57mm, minimum height=56mm, text=cyMutedMint, align=center]
-				at ([xshift=-8mm,yshift=-28mm]current page.north east)
-				{\IfFileExists{#4}{\includegraphics[width=57mm,height=56mm,keepaspectratio]{#4}}{\Large image\\placeholder}};
-		\end{tikzpicture}
-	\end{frame}}
+			\begin{frame}[plain]
+				\cyCircuitBackgroundLight\cyTopLogoLight\cyHeaderTag{#1}
+				\begin{tikzpicture}[remember picture,overlay]
+					\node[anchor=north west, text=cyText, align=left, font=\normalfont\fontsize{29}{34}\selectfont] at ([xshift=9mm,yshift=-29mm]current page.north west) {#2};
+					\node[anchor=north west, text=cyText, align=left] at ([xshift=10mm,yshift=-61mm]current page.north west) {\begin{minipage}{52mm}#3\end{minipage}};
+					\node[anchor=north east, rounded corners=5pt, fill=black!10, minimum width=57mm, minimum height=56mm, text=cyMutedMint, align=center]
+					at ([xshift=-8mm,yshift=-28mm]current page.north east)
+					{\IfFileExists{#4}{\includegraphics[width=57mm,height=56mm,keepaspectratio]{#4}}{\Large image\\placeholder}};
+				\end{tikzpicture}
+			\end{frame}}
 }
 
 \newcommand{\cyThanksFrame}{%
 	{\setbeamercolor{background canvas}{bg=cyDark}%
-	\begin{frame}[plain]
-		\cyThanksPage
-	\end{frame}}
+			\begin{frame}[plain]
+				\cyThanksPage
+			\end{frame}}
 }
 
 % ---------- Ordinary frames ----------
 \defbeamertemplate*{footline}{cycerone}{%
 	\ifnum\value{framenumber}>1\relax
 		\leavevmode\hbox{\begin{beamercolorbox}[wd=\paperwidth,ht=4mm,dp=1.5mm,leftskip=9mm,rightskip=9mm]{author in head/foot}%
-			\usebeamerfont{author in head/foot}\color{cyMutedMint}\fontsize{7}{8}\selectfont\insertauthor\hfill\insertsectionhead%
-		\end{beamercolorbox}}%
+				\usebeamerfont{author in head/foot}\color{cyMutedMint}\fontsize{7}{8}\selectfont\insertauthor\hfill\insertsectionhead%
+			\end{beamercolorbox}}%
 	\fi
 }
 \setbeamertemplate{footline}[cycerone]
@@ -336,6 +378,6 @@
 		\node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=9mm,yshift=18mm]current page.south west) {\insertauthor};
 		\node[anchor=west, text=cyMutedMint, font=\normalfont\fontsize{8}{9}\selectfont] at ([xshift=9mm,yshift=10mm]current page.south west) {\insertdate};
 		\node[anchor=south east, circle, fill=white, draw=white, minimum size=18mm, inner sep=1.8mm]
-			at ([xshift=-86mm,yshift=6mm]current page.south east) {\cyTitleGraphic};
+		at ([xshift=-86mm,yshift=6mm]current page.south east) {\cyTitleGraphic};
 	\end{tikzpicture}%
 }
