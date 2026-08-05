@@ -100,18 +100,51 @@
 \setbeamercolor{block body alerted}{fg=cyText,bg=cyAlertBlock}
 \setbeamerfont{block title}{series=\bfseries}
 \setbeamerfont{block title alerted}{series=\bfseries}
+
+% Tune block/alertblock body and title font sizes independently here.
+\newcommand{\cyBlockFontSize}{10}
+\newcommand{\cyBlockLineHeight}{12}
+\newcommand{\cyBlockTitleFontSize}{11}
+\newcommand{\cyBlockTitleLineHeight}{13}
+\newcommand{\cyAlertBlockFontSize}{10}
+\newcommand{\cyAlertBlockLineHeight}{12}
+\newcommand{\cyAlertBlockTitleFontSize}{11}
+\newcommand{\cyAlertBlockTitleLineHeight}{13}
+
+\newcommand{\cySetBlockFontSize}[2]{%
+	\renewcommand{\cyBlockFontSize}{#1}%
+	\renewcommand{\cyBlockLineHeight}{#2}%
+}
+\newcommand{\cySetBlockTitleFontSize}[2]{%
+	\renewcommand{\cyBlockTitleFontSize}{#1}%
+	\renewcommand{\cyBlockTitleLineHeight}{#2}%
+}
+\newcommand{\cySetAlertBlockFontSize}[2]{%
+	\renewcommand{\cyAlertBlockFontSize}{#1}%
+	\renewcommand{\cyAlertBlockLineHeight}{#2}%
+}
+\newcommand{\cySetAlertBlockTitleFontSize}[2]{%
+	\renewcommand{\cyAlertBlockTitleFontSize}{#1}%
+	\renewcommand{\cyAlertBlockTitleLineHeight}{#2}%
+}
+
 \defbeamertemplate{block begin}{cycerone}{%
 	\begin{beamercolorbox}[wd=\textwidth,rounded=true,shadow=false,sep=1.2ex]{block body}%
-		{\usebeamerfont{block title}\usebeamercolor[fg]{block title}\insertblocktitle\par}\vspace{0.45ex}%
-		\usebeamerfont{block body}\usebeamercolor[fg]{block body}%
+		\ifdefempty{\insertblocktitle}{}{%
+			{\usebeamerfont{block title}\usebeamercolor[fg]{block title}\fontsize{\cyBlockTitleFontSize}{\cyBlockTitleLineHeight}\selectfont\insertblocktitle\par}\vspace{0.45ex}%
+		}%
+		\usebeamerfont{block body}\usebeamercolor[fg]{block body}\fontsize{\cyBlockFontSize}{\cyBlockLineHeight}\selectfont%
 		}
 		\defbeamertemplate{block end}{cycerone}{\end{beamercolorbox}}
 \defbeamertemplate{block alerted begin}{cycerone}{%
 	\begin{beamercolorbox}[wd=\textwidth,rounded=true,shadow=false,sep=1.2ex]{block body alerted}%
-		{\usebeamerfont{block title alerted}\usebeamercolor[fg]{block title alerted}\insertblocktitle\par}\vspace{0.45ex}%
-		\usebeamerfont{block body alerted}\usebeamercolor[fg]{block body alerted}%
+		\ifdefempty{\insertblocktitle}{}{%
+			{\usebeamerfont{block title alerted}\usebeamercolor[fg]{block title alerted}\fontsize{\cyAlertBlockTitleFontSize}{\cyAlertBlockTitleLineHeight}\selectfont\insertblocktitle\par}\vspace{0.45ex}%
+		}%
+		\usebeamerfont{block body alerted}\usebeamercolor[fg]{block body alerted}\fontsize{\cyAlertBlockFontSize}{\cyAlertBlockLineHeight}\selectfont%
 		}
 		\defbeamertemplate{block alerted end}{cycerone}{\end{beamercolorbox}}
+
 \setbeamertemplate{block begin}[cycerone]
 \setbeamertemplate{block end}[cycerone]
 \setbeamertemplate{block alerted begin}[cycerone]
@@ -352,18 +385,53 @@
 \defbeamertemplate*{footline}{cycerone}{%
 	\ifnum\value{framenumber}>1\relax
 		\leavevmode\hbox{\begin{beamercolorbox}[wd=\paperwidth,ht=4mm,dp=1.5mm,leftskip=9mm,rightskip=9mm]{author in head/foot}%
-				\usebeamerfont{author in head/foot}\color{cyMutedMint}\fontsize{7}{8}\selectfont\insertauthor\hfill\insertsectionhead%
+				\usebeamerfont{author in head/foot}\color{cyMutedMint}\fontsize{7}{8}\selectfont\insertauthor\hfill\insertsectionhead\hspace{4mm}\textbar\hspace{4mm}\insertframenumber%
 			\end{beamercolorbox}}%
 	\fi
 }
 \setbeamertemplate{footline}[cycerone]
 
+% --------- Frame title ----------
+\newcommand{\cyFrametitleYShift}{-3mm}
+\newcommand{\cyFrametitleXShift}{3mm}
+\newcommand{\cyFrametitleWidth}{\dimexpr\paperwidth-18mm\relax}
+\newcommand{\cyFrametitleFontSize}{24}
+\newcommand{\cyFrametitleLineHeight}{28}
+\newcommand{\cyFrametitleColor}{cyText}
+\newcommand{\cyFrametitleReserve}{22mm}
+
+\newcommand{\cySetFrametitleStyle}[4]{%
+	\renewcommand{\cyFrametitleYShift}{#1}%
+	\renewcommand{\cyFrametitleXShift}{#2}%
+	\renewcommand{\cyFrametitleFontSize}{#3}%
+	\renewcommand{\cyFrametitleLineHeight}{#4}%
+}
+
+% ---------- Frame content ----------
+\newcommand{\cyContentYOffset}{-10mm}
+
+\newcommand{\cySetContentOffset}[1]{%
+	\renewcommand{\cyContentYOffset}{#1}%
+}
+
+\newcommand{\cyContentFontSize}{16}
+\newcommand{\cyContentLineHeight}{20}
+\newcommand{\cySetContentFontSize}[2]{%
+	\fontsize{#1}{#2}\selectfont%
+}
+
+% Apply the frame title and content offset settings to the frame title template.
 \defbeamertemplate*{frametitle}{cycerone}{%
 	\cyTopLogoLight%
-	% Tune title/content vertical spacing with these two values.
-	\vspace{-1.5mm}{\parbox[t]{\dimexpr\paperwidth-18mm\relax}{\raggedright\normalfont\fontsize{24}{28}\selectfont\color{cyText}\insertframetitle}}\par\vspace{0.5mm}%
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=north west, text=\cyFrametitleColor, align=left] at
+		([xshift=\cyFrametitleXShift,yshift=\cyFrametitleYShift]current page.north west)
+		{\parbox[t]{\cyFrametitleWidth}{\raggedright\normalfont\fontsize{\cyFrametitleFontSize}{\cyFrametitleLineHeight}\selectfont\insertframetitle}};
+	\end{tikzpicture}%
+	\vspace{\dimexpr\cyFrametitleReserve+\cyContentYOffset\relax}%
 }
 \setbeamertemplate{frametitle}[cycerone]
+
 
 \setbeamertemplate{title page}{%
 	\begin{tikzpicture}[remember picture,overlay]

@@ -67,6 +67,16 @@
   % \cySectionPage{01}{Introduction}{}
 \end{frame}
 
+{
+  \cySetFrametitleStyle{-25mm}{9mm}{18}{22}%
+  \cySetContentOffset{-5mm}%
+  \cySetContentFontSize{8}{10}
+  \begin{frame}
+    \frametitle{Custom slide title position and size}
+    ...
+  \end{frame}
+}
+
 \begin{frame}{Slide with a Picture}
 \begin{columns}[T,onlytextwidth]
   \column{.47\textwidth}
@@ -92,6 +102,17 @@
     This is an alert block.
   \end{alertblock}
 \end{frame}
+
+% The BLOCK title can be empty `{}`. 
+% The FONT SIZE can be set with \cySetBlockFontSize{8}{10}. 
+{\cySetBlockTitleFontSize{14}{16}
+% The first parameter is the font size, the second is the line spacing (usually x1.2 of the font size).
+\begin{frame}{Slide with a Block}
+  \begin{block}{Block title}
+    This is a simple block.
+  \end{block}
+\end{frame}
+}
 
 \begin{frame}[fragile]{Slide with Some Code}
 \begin{lstlisting}[language=Python]
