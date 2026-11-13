@@ -44,11 +44,16 @@
 \renewcommand{\familydefault}{\sfdefault}
 
 % ---------- User configuration ----------
-\newcommand{\cyProjectLogoDarkFile}{figures/cycerone-logo.png}
-\newcommand{\cyProjectLogoLightFile}{figures/cycerone-logo-light.png}
-\newcommand{\cyEULogoFile}{figures/eu-logo.png}
-\newcommand{\cyTitleGraphicFile}{figures/unitn-logo.png}
-\newcommand{\cyEventName}{University of Trento}
+\IfFileExists{../../template/figures/cycerone-logo.png}{%
+\newcommand{\cyFigureRoot}{../../template/figures/}%
+}{%
+\newcommand{\cyFigureRoot}{../template/figures/}%
+}
+\newcommand{\cyProjectLogoDarkFile}{\cyFigureRoot cycerone-logo.png}
+\newcommand{\cyProjectLogoLightFile}{\cyFigureRoot cycerone-logo-light.png}
+\newcommand{\cyEULogoFile}{\cyFigureRoot eu-logo.png}
+\newcommand{\cyTitleGraphicFile}{\cyFigureRoot unitn-logo.png}
+\newcommand{\cyEventName}{Web Security}
 \newcommand{\cyWebsite}{https://cycerone.eu/en}
 \newcommand{\cyEmail}{cycerone.project@unitn.it}
 \newcommand{\cyContactName}{\insertauthor}
@@ -449,3 +454,17 @@
 		at ([xshift=-86mm,yshift=6mm]current page.south east) {\cyTitleGraphic};
 	\end{tikzpicture}%
 }
+
+% --------- Notes ----------
+
+% \setbeamertemplate{note page}{%
+% %   {\usebeamerfont{frametitle}%
+% %    \bfseries\Large
+% %    \insertframetitle\par}
+
+% 	{\Large\insertnote\par}
+%     \vfill
+% }
+
+% \usepackage{pgfpages}
+% \setbeameroption{show notes on second screen=right}

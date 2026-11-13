@@ -1,0 +1,22 @@
+% Shared visual vocabulary for course slides. Colours come from beamerthemeCycerone.
+\tikzset{
+  cy box/.style={draw=cyLine,fill=white,text=cyText,rounded corners=2pt,thick,align=center,
+    minimum height=8mm,inner sep=2.2mm,font=\small},
+  cy dark box/.style={cy box,draw=cyDark,fill=cyDark,text=white},
+  cy mint box/.style={cy box,fill=cyPale,draw=cyLine,text=cyText},
+  cy process/.style={cy box,minimum width=22mm,fill=cyInlineCode},
+  cy layer/.style={cy box,minimum width=48mm,minimum height=7mm},
+  cy arrow/.style={-{Latex[length=2.5mm]},thick,draw=cyLine},
+  cy dashed/.style={draw=cyMutedMint,dashed,thick,rounded corners=3pt},
+  cy label/.style={font=\scriptsize,text=cyMutedMint,align=center},
+  cy title/.style={font=\small\bfseries,text=cyDark,align=center}
+}
+
+\newcommand{\cyKernelBar}[1][11.5cm]{%
+  \node[cy dark box,minimum width=#1,minimum height=8mm] {Shared Linux kernel};}
+
+\newcommand{\cyStackBox}[2]{%
+  \node[cy box,minimum width=34mm,minimum height=8mm,fill=#1] {#2};}
+
+\newcommand{\cyMiniTag}[1]{%
+  \tikz[baseline=(x.base)]\node[cy mint box,inner xsep=1.8mm,inner ysep=.7mm,font=\scriptsize] (x) {#1};}

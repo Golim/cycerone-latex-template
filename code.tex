@@ -1,0 +1,24 @@
+% Shared syntax highlighting for slide code blocks.
+\usepackage{minted}
+\setminted{
+    style=friendly,
+    fontsize=\small,
+    baselinestretch=1.1,
+    frame=single,
+    framesep=2mm,
+    bgcolor=black!0,
+    breaklines,
+    autogobble,
+    tabsize=2
+}
+
+\newminted[pythoncode]{python}{}
+\newminted[jscode]{javascript}{}
+\newminted[htmlcode]{html}{}
+\newminted[httpcode]{http}{}
+\newminted[httpreq]{bash}{}
+\newminted[bashcode]{bash}{}
+\newminted[sqlcode]{sql}{}
+\newminted[phpcode]{php}{}
+
+\setlength{\fboxsep}{0pt}

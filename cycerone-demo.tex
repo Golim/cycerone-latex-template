@@ -1,6 +1,9 @@
 \documentclass[aspectratio=169,11pt]{beamer}
 
 \usetheme{Cycerone}
+\usetikzlibrary{arrows.meta,positioning}
+\input{diagrams.tex}
+\input{code.tex}
 
 \cysetprojectlogo{figures/cycerone-logo.png}
 \cyseteulogo{figures/eu-logo.png}
@@ -26,15 +29,6 @@
 }
 
 \usetikzlibrary{decorations.pathreplacing}
-\usepackage{listings}
-\lstset{
-  basicstyle=\ttfamily\small,
-  showstringspaces=false,
-  breaklines=true,
-  frame=single,
-  framerule=0pt,
-}
-
 \titlegraphic{\includegraphics[height=11mm]{figures/unitn-logo.png}}
 \title{Title of the Presentation}
 \author{CYCERONE}
@@ -103,6 +97,32 @@
   \end{alertblock}
 \end{frame}
 
+\begin{frame}{Slide with a Diagram}
+\small
+The shared \texttt{diagrams.tex} file provides a visual language for diagrams, with reusable boxes, arrows, labels, and colours that match the slide theme.
+\par\vspace{9mm}
+\centering
+\begin{tikzpicture}[node distance=9mm and 15mm]
+  \node[cy mint box,minimum width=25mm] (a) {Element A};
+  \node[cy box,minimum width=25mm,below=of a] (b) {Element B};
+
+  \node[cy dark box,minimum width=30mm,right=of a,xshift=5mm,yshift=-5mm] (one) {Stage 1};
+  \node[cy process,below=of one] (two) {Stage 2};
+  \draw[cy dashed] ([xshift=-3mm,yshift=6mm]one.north west) rectangle ([xshift=7mm,yshift=-6mm]two.south east);
+  \node[cy title,above=1mm of one.north] {Group};
+
+  \node[cy mint box,minimum width=25mm,right=of one,xshift=5mm,yshift=-5mm] (c) {Element C};
+  \node[cy box,minimum width=25mm,below=of c] (d) {Element D};
+
+  \draw[cy arrow] (a.east) -- node[cy label,above] {Path 1} (one.west);
+  \draw[cy arrow] (b.east) -- node[cy label,below] {Path 2} (two.west);
+  \draw[cy arrow] (one.east) -- (c.west);
+  \draw[cy arrow] (two.east) -- (d.west);
+  \draw[cy arrow,dashed] (one.south) -- (two.north);
+  \node[cy label,below=2mm of two.south] {Related elements};
+\end{tikzpicture}
+\end{frame}
+
 % The BLOCK title can be empty `{}`. 
 % The FONT SIZE can be set with \cySetBlockFontSize{8}{10}. 
 {\cySetBlockTitleFontSize{14}{16}
@@ -115,10 +135,10 @@
 }
 
 \begin{frame}[fragile]{Slide with Some Code}
-\begin{lstlisting}[language=Python]
+\begin{pythoncode}
 def hello_world():
     print("Hello, world!")
-\end{lstlisting}
+\end{pythoncode}
 \end{frame}
 
 \begin{frame}[plain]
